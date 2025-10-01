@@ -71,6 +71,8 @@ class S3Services:
             "job_title": job_title,
             "date": today,
             "uploaded_files": [],
+            "upload_folders":[],
+            "uploaded_at": [],
             "total_uploaded": 0,
             "total_failed": 0,
         }
@@ -80,23 +82,23 @@ class S3Services:
 
         applicants_folder = local_job_folder / "applicants"
         if applicants_folder.exists():
-            uploaded = self._upload_section_files(
+            uploaded_files = self._upload_section_files(
                 applicants_folder,
                 f"{today}/{clean_job_title}/applicants/",
                 bucket,
             )
-            results["uploaded_files"].extend(uploaded)
-            results["total_uploaded"] += len(uploaded)
+            results["upload_folders"].append(f"{today}/{clean_job_title}/applicants/")
+            results["total_uploaded"] += len(uploaded_files)
 
         possible_matches_folder = local_job_folder / "possible_matches"
         if possible_matches_folder.exists():
-            uploaded = self._upload_section_files(
+            uploaded_files = self._upload_section_files(
                 possible_matches_folder,
                 f"{today}/{clean_job_title}/possible_matches/",
                 bucket,
             )
-            results["uploaded_files"].extend(uploaded)
-            results["total_uploaded"] += len(uploaded)
+            results["upload_folders"].append(f"{today}/{clean_job_title}/possible_matches/")
+            results["total_uploaded"] += len(uploaded_files)
 
         return results
 
@@ -119,6 +121,7 @@ class S3Services:
             if job_folder.is_dir():
                 result = self.upload_job_files_to_s3(job_folder.name, bucket)
                 all_results.append(result)
+                
         return all_results
 
     def retrieve_s3_url(self, object_name: str, bucket: str | None = None, expiration: int = 3600) -> str | None:
