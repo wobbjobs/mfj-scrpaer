@@ -1,6 +1,6 @@
 from services.google_service import GoogleServices
 from services.aws import S3Services,get_or_create_job_folder
-from config.settings import MYFUTUREJOBS_PASS, MYFUTUREJOBS_USER, MYFUTUREJOBS_URL, RESUME_PARSER_URL,WSP_IP
+from config.settings import MYFUTUREJOBS_PASS, MYFUTUREJOBS_USER, MYFUTUREJOBS_URL, RESUME_PARSER_URL
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 from services.tracker import ScrapingTracker
 import time
