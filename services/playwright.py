@@ -464,12 +464,10 @@ def cleanup_and_save(tracker, browser, upload_to_s3=True, bucket_name=None, proc
                 except Exception as e:
                     print(f"Resume processing failed: {e}")
             
-            print(uploadFolders)
             if uploadFolders:
                 try:
                     json_serializable_ids = [str(obj_id) for obj_id in uploadFolders]
-                    print(f"Json: {json_serializable_ids}")
-                    print(RESUME_PARSER_URL)
+                    
                     response = requests.post(
                         f"{RESUME_PARSER_URL}/mfj-job-processer?mode=group&max_batch=1000",
                         headers={
