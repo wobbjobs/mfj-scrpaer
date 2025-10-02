@@ -20,7 +20,8 @@ class ScrapingTracker:
         return {
             "last_full_scan": None,
             "jobs": {},
-            "downloaded_files": set()
+            "downloaded_files": set(),
+            "resume_state": None
         }
     
     def save_tracker(self):
@@ -82,10 +83,28 @@ class ScrapingTracker:
             return None
         return self.data["jobs"][job_title]
     
+    def set_resume_state(self, job_index, current_job, section_name, current_page, current_row):
+        """Store the current scraping state for resuming"""
+        self.data["resume_state"] = {
+            "job_index": job_index,
+            "current_job": current_job,
+            "section_name": section_name,
+            "current_page": current_page,
+            "current_row": current_row
+        }
+
+    def get_resume_state(self):
+        """Get the stored resume state"""
+        return self.data.get("resume_state")
+
+    def clear_resume_state(self):
+        """Clear the resume state after successful completion"""
+        self.data["resume_state"] = None
+
     def cleanup_old_tracking(self, days_old=30):
         """Remove tracking data older than specified days"""
         cutoff_date = datetime.now().timestamp() - (days_old * 24 * 3600)
-        
+
         jobs_to_remove = []
         for job_title, job_info in self.data["jobs"].items():
             try:
@@ -94,8 +113,8 @@ class ScrapingTracker:
                     jobs_to_remove.append(job_title)
             except:
                 jobs_to_remove.append(job_title)
-        
+
         for job_title in jobs_to_remove:
             del self.data["jobs"][job_title]
-        
+
         print(f"Cleaned up {len(jobs_to_remove)} old job tracking entries")
