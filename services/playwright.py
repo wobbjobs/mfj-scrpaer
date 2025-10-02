@@ -471,7 +471,7 @@ def cleanup_and_save(tracker, browser, upload_to_s3=True, bucket_name=None, proc
                     print(f"Json: {json_serializable_ids}")
                     print(RESUME_PARSER_URL)
                     response = requests.post(
-                        f"http://{WSP_IP}:5002/ids?mode=group&max_batch=1000",
+                        f"{RESUME_PARSER_URL}/mfj-job-processer?mode=group&max_batch=1000",
                         headers={
                             "accept": "application/json",
                             "Content-Type": "application/json",
